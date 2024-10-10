@@ -49,13 +49,13 @@ jobs:
       - name: Set up SCP
         run: |
           mkdir -v -m 700 $HOME/.ssh
-          ssh-keyscan -H ${{ secrets.VM_HOST }} > $HOME/.ssh/known_hosts
+          ssh-keyscan -H ${{ vars.VM_HOST }} > $HOME/.ssh/known_hosts
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa
           chmod 400 $HOME/.ssh/id_rsa
 
       - name: Upload to server
         run: |
-          scp docker-compose.yaml ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:~/
+          scp docker-compose.yaml ${{ vars.VM_USERNAME }}@${{ vars.VM_HOST }}:~/
 
       # other steps here
 
