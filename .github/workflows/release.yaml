@@ -53,32 +53,13 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa
           chmod 400 $HOME/.ssh/id_rsa
 
+      - name: Create destination directory if not exist
+        run: ssh ${{ vars.VM_USERNAME }}@${{ vars.VM_HOST }} 'mkdir -p ~/app'
+
       - name: Upload to server
         run: |
-          scp docker-compose.yaml ${{ vars.VM_USERNAME }}@${{ vars.VM_HOST }}:~/
+          scp docker-compose.yaml ${{ vars.VM_USERNAME }}@${{ vars.VM_HOST }}:~/app/
 
-      # other steps here
-
-#      - name: Copy files to VM
-#        uses: appleboy/scp-action@v0.1.7
-#        with:
-#          host: ${{ vars.VM_HOST }}
-#          username: ${{ vars.VM_USERNAME }}
-#          key: ${{ secrets.SSH_PRIVATE_KEY }}
-#          overwrite: true
-#          source: docker-compose.yaml
-#          target: /home/${{ vars.VM_USERNAME }}/app
-
-      - name: Deploy to VM
-        uses: appleboy/ssh-action@master
-        env:
-          IMAGE_TAG: $GITHUB_SHA
-        with:
-          host: ${{ vars.VM_HOST }}
-          username: ${{ vars.VM_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          envs: IMAGE_TAG
-          script: |
-            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} 
-            docker compose -f app/docker-compose.yaml pull
-            docker compose -f app/docker-compose.yaml up -d
+      - name: Deploy to server
+        run: |
+          ssh ${{ vars.VM_USERNAME }}@${{ vars.VM_HOST }} 'docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} && docker compose -f ~/app/docker-compose.yaml pull && docker compose -f ~/app/docker-compose.yaml up -d'
