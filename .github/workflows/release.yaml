@@ -46,15 +46,28 @@ jobs:
       - name: Run ls to debug
         run: ls
 
-      - name: Copy files to VM
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ vars.VM_HOST }}
-          username: ${{ vars.VM_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          overwrite: true
-          source: docker-compose.yaml
-          target: /home/${{ vars.VM_USERNAME }}/app
+      - name: Set up SCP
+        run: |
+          mkdir -v -m 700 $HOME/.ssh
+          ssh-keyscan -H ${{ secrets.VM_HOST }} > $HOME/.ssh/known_hosts
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > $HOME/.ssh/id_rsa
+          chmod 400 $HOME/.ssh/id_rsa
+
+      - name: Upload to server
+        run: |
+          scp docker-compose.yaml ${{ secrets.VM_USERNAME }}@${{ secrets.VM_HOST }}:~/
+
+      # other steps here
+
+#      - name: Copy files to VM
+#        uses: appleboy/scp-action@v0.1.7
+#        with:
+#          host: ${{ vars.VM_HOST }}
+#          username: ${{ vars.VM_USERNAME }}
+#          key: ${{ secrets.SSH_PRIVATE_KEY }}
+#          overwrite: true
+#          source: docker-compose.yaml
+#          target: /home/${{ vars.VM_USERNAME }}/app
 
       - name: Deploy to VM
         uses: appleboy/ssh-action@master
