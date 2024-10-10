@@ -22,9 +22,7 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/adibov/docker-compose-cd-workflow:${GITHUB_SHA},ghcr.io/adibov/docker-compose-cd-workflow:latest
-        env:
-          GITHUB_SHA: ${{ github.sha }}
+          tags: ghcr.io/adibov/docker-compose-cd-workflow:${{ github.sha }},ghcr.io/adibov/docker-compose-cd-workflow:latest
 
   deploy:
     needs: release-docker
