@@ -1,0 +1,7 @@
+services:
+  app:
+    image: ghcr.io/adibov/docker-compose-cd-workflow:$IMAGE_TAG
+    build:
+      context: .
+      cache_from:
+        - ghcr.io/adibov/docker-compose-cd-workflow:latest
