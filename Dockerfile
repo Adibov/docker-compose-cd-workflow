@@ -6,7 +6,7 @@ RUN go mod download
 ADD . .
 RUN go build -o main .
 
-FROM debian:stretch-slim
+FROM debian:bookworm-slim
 
 WORKDIR /app
 COPY --from=base /app/main .
