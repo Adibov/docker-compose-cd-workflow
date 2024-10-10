@@ -43,6 +43,9 @@ jobs:
       - name: rename docker-compose-substituted.yaml to docker-compose.yaml
         run: mv docker-compose-substituted.yaml docker-compose.yaml
 
+      - name: Run ls to debug
+        run: ls
+
       - name: Copy files to VM
         uses: appleboy/scp-action@master
         with:
