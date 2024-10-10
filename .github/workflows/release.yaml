@@ -5,7 +5,6 @@ on: [push]
 jobs:
   release-docker:
     permissions: write-all
-    needs: build
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
