@@ -5,3 +5,5 @@ services:
       context: .
       cache_from:
         - ghcr.io/adibov/docker-compose-cd-workflow:latest
+    ports:
+      - 8080:8080
