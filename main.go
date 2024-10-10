@@ -10,7 +10,7 @@ func main() {
 	router := gin.Default()
 
 	router.GET("/echo", func(c *gin.Context) {
-		c.JSON(http.StatusOK, "Hello World!")
+		c.JSON(http.StatusOK, "Hello World! (new version!)")
 	})
 
 	router.Run(":8080")
